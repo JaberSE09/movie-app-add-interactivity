@@ -1,13 +1,12 @@
 import { PencilIcon, StarIcon, TrashIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
 
-/*
- This are Icons that you can use to represent the edit and delete actions on a movie item if you like.
-*/
-// import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
-
-export default function MovieItem({ movie, setShowMovieForm, setCurrentMovie, onRemove }) {
-  const [Rating, setRating] = useState(movie.rating);
+export default function MovieItem({
+  movie,
+  setShowMovieForm,
+  setCurrentMovie,
+  onRemove,
+  onRatingChange,
+}) {
   return (
     <div className="movie-item group">
       <div className="movie-item-image-wrapper">
@@ -29,9 +28,13 @@ export default function MovieItem({ movie, setShowMovieForm, setCurrentMovie, on
         </div>
         <div className="movie-item-rating-wrapper">
           <span className="movie-item-rating-text">
-            Rating: {Rating || 0}/5
+            Rating: {movie.rating || 0}/5
           </span>
-          <StarRating rating={Rating} movieName={movie.name} setRating={setRating} />
+          <StarRating
+            rating={movie.rating}
+            movieName={movie.name}
+            onRatingChange={(rating) => onRatingChange?.(movie, rating)}
+          />
         </div>
       </div>
       <div className="movie-item-actions-wrapper flex justify-between gap-2 p-10">
@@ -100,9 +103,9 @@ function GenreTag({ genre }) {
   return <span className="movie-item-genre-tag">{genre}</span>;
 }
 
-function StarRating({ rating, movieName, setRating }) {
+function StarRating({ rating, movieName, onRatingChange }) {
   const handleRating = (star) => {
-    setRating(star);
+    onRatingChange?.(star);
   };
   return (
     <div className="movie-item-star-icon-wrapper">

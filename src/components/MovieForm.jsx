@@ -20,7 +20,8 @@ export default function MovieForm({ movie, onSave, onCancel }) {
     const data = {
       ...Object.fromEntries(formData),
       genres: formData.getAll("genres"),
-      id: movie?.id || formData.get("id"),
+      inTheaters: formData.get("inTheaters") === "on",
+      id: movie?.id || formData.get("id") || Date.now(),
     };
     onSave(data);
   };

@@ -14,6 +14,16 @@ export default function App() {
     setCurrentMovie(null);
     setShowMovieForm(false);
   };
+  const handleRemoveRatings = () => {
+    setMovies((prev) => prev.map((movie) => ({ ...movie, rating: null })));
+    setCurrentMovie(null);
+    setShowMovieForm(false);
+  };
+  const handleRatingChange = (movie, rating) => {
+    setMovies((prev) =>
+      prev.map((m) => (m.id === movie.id ? { ...m, rating } : m))
+    );
+  };
 
   return (
     <div className="app">
@@ -23,6 +33,8 @@ export default function App() {
         setShowMovieForm(true);
       }
      }>Add Movie</button>
+
+     <button className="btn btn-primary" onClick={handleRemoveRatings}>Remove Ratings</button>
       
       <Modal
         onClose={() => setShowMovieForm(false)}
@@ -32,12 +44,18 @@ export default function App() {
         <MovieForm
           movie={currentMovie}
           onSave={(data) => {
-            if(currentMovie){
-              setMovies((prev) => prev.map((m) => m.id === currentMovie.id ? data : m));
+            if (currentMovie) {
+              setMovies((prev) =>
+                prev.map((m) =>
+                  m.id === currentMovie.id
+                    ? { ...data, id: currentMovie.id, rating: currentMovie.rating }
+                    : m
+                )
+              );
             } else {
-              setMovies((prev) => [...prev, data]);
+              setMovies((prev) => [...prev, { ...data, id: Date.now() }]);
             }
-            setShowMovieForm(false);  
+            setShowMovieForm(false);
           }}
           onCancel={() => {
             setShowMovieForm(false);
@@ -52,6 +70,7 @@ export default function App() {
             setShowMovieForm={setShowMovieForm}
             setCurrentMovie={setCurrentMovie}
             onRemove={handleRemoveMovie}
+            onRatingChange={handleRatingChange}
           />
         ))}
       </div>
