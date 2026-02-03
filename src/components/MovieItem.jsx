@@ -1,4 +1,5 @@
 import { PencilIcon, StarIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { useState } from "react";
 
 /*
  This are Icons that you can use to represent the edit and delete actions on a movie item if you like.
@@ -6,6 +7,7 @@ import { PencilIcon, StarIcon, TrashIcon } from "@heroicons/react/24/solid";
 // import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 
 export default function MovieItem({ movie, setShowMovieForm, setCurrentMovie, onRemove }) {
+  const [Rating, setRating] = useState(movie.rating);
   return (
     <div className="movie-item group">
       <div className="movie-item-image-wrapper">
@@ -27,9 +29,9 @@ export default function MovieItem({ movie, setShowMovieForm, setCurrentMovie, on
         </div>
         <div className="movie-item-rating-wrapper">
           <span className="movie-item-rating-text">
-            Rating: {movie.rating || 0}/5
+            Rating: {Rating || 0}/5
           </span>
-          <StarRating rating={movie.rating} movieName={movie.name} />
+          <StarRating rating={Rating} movieName={movie.name} setRating={setRating} />
         </div>
       </div>
       <div className="movie-item-actions-wrapper flex justify-between gap-2 p-10">
@@ -98,11 +100,15 @@ function GenreTag({ genre }) {
   return <span className="movie-item-genre-tag">{genre}</span>;
 }
 
-function StarRating({ rating, movieName }) {
+function StarRating({ rating, movieName, setRating }) {
+  const handleRating = (star) => {
+    setRating(star);
+  };
   return (
     <div className="movie-item-star-icon-wrapper">
       {[1, 2, 3, 4, 5].map((star) => (
-        <button
+        <button 
+        onClick={() => handleRating(star)}
           aria-label={`Rate ${movieName} with ${star} star${
             star > 1 ? "s" : ""
           }`}
@@ -113,7 +119,8 @@ function StarRating({ rating, movieName }) {
               : "text-gray-400 hover:text-yellow-300"
           }`}
         >
-          <StarIcon className="movie-item-star-icon" />
+          <StarIcon 
+          className="movie-item-star-icon" />
         </button>
       ))}
     </div>

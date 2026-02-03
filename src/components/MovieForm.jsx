@@ -12,6 +12,7 @@ const genres = [
 
 export default function MovieForm({ movie, onSave, onCancel }) {
   const handleSubmit = (e) => {
+    
     e.preventDefault();
 
     const formData = new FormData(e.target);

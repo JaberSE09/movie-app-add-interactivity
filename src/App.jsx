@@ -17,6 +17,13 @@ export default function App() {
 
   return (
     <div className="app">
+     <button className="btn btn-primary" onClick={() =>
+      {
+        setCurrentMovie(null);
+        setShowMovieForm(true);
+      }
+     }>Add Movie</button>
+      
       <Modal
         onClose={() => setShowMovieForm(false)}
         isOpen={showMovieForm}
@@ -25,7 +32,12 @@ export default function App() {
         <MovieForm
           movie={currentMovie}
           onSave={(data) => {
-            console.log("Movie saved:", data);
+            if(currentMovie){
+              setMovies((prev) => prev.map((m) => m.id === currentMovie.id ? data : m));
+            } else {
+              setMovies((prev) => [...prev, data]);
+            }
+            setShowMovieForm(false);  
           }}
           onCancel={() => {
             setShowMovieForm(false);
